@@ -1,0 +1,42 @@
+{
+  "name": "Studio Nova",
+  "assistantName": "Nova",
+  "language": "en",
+  "timezone": "Europe/Istanbul",
+  "currency": "TRY",
+  "slotStepMinutes": 15,
+  "minLeadMinutes": 60,
+  "maxLeadDays": 14,
+  "hours": {
+    "mon": ["09:00", "19:00"],
+    "tue": ["09:00", "19:00"],
+    "wed": ["09:00", "19:00"],
+    "thu": ["09:00", "19:00"],
+    "fri": ["09:00", "20:00"],
+    "sat": ["10:00", "18:00"],
+    "sun": null
+  },
+  "services": [
+    { "id": "haircut", "name": "Haircut", "minutes": 45, "price": 600 },
+    { "id": "beard", "name": "Beard trim", "minutes": 20, "price": 250 },
+    { "id": "color", "name": "Hair colour", "minutes": 120, "price": 1800, "description": "Includes wash and blow-dry." },
+    { "id": "manicure", "name": "Manicure", "minutes": 40, "price": 450 }
+  ],
+  "staff": [
+    { "id": "ayse", "name": "Ayşe", "services": ["haircut", "color"] },
+    { "id": "mert", "name": "Mert", "services": ["haircut", "beard"], "hours": {
+      "mon": null,
+      "tue": ["12:00", "19:00"],
+      "wed": ["12:00", "19:00"],
+      "thu": ["12:00", "19:00"],
+      "fri": ["12:00", "20:00"],
+      "sat": ["10:00", "18:00"],
+      "sun": null
+    } },
+    { "id": "zeynep", "name": "Zeynep", "services": ["manicure"] }
+  ],
+  "faq": [
+    { "q": "Where are you?", "a": "Moda Caddesi 12, Kadıköy, Istanbul. Five minutes from the Moda tram stop." },
+    { "q": "Can I pay by card?", "a": "Yes, all cards are accepted." }
+  ]
+}
