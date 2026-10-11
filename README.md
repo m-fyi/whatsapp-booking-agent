@@ -1,15 +1,34 @@
+<div align="center">
+
 # whatsapp-booking-agent
 
-A WhatsApp booking assistant for salons, clinics, barbers and studios, powered by Claude.
+**Your customers book on WhatsApp. Claude answers in seconds. Nobody gets booked by mistake.**
 
-Customers write the way they talk: *"haircut with Mert tomorrow after 2?"*. Claude understands it and answers with native WhatsApp menus. The customer taps a time, then taps **Book it**.
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)
+![Claude](https://img.shields.io/badge/AI-Claude-d97757)
+![Tests](https://img.shields.io/badge/tests-28%20passing-brightgreen)
 
-**The AI never books anything by itself.** It has no tool that writes a booking. Only the customer's tap on the confirmation card does. So even a confused model can't create an appointment nobody asked for.
+[Try it in 1 minute](#try-it-in-1-minute) · [See a chat](#what-your-customers-see) · [Give it to your AI](#give-it-to-your-ai)
 
-<!-- TODO: demo GIF of a real WhatsApp chat -->
+</div>
+
+---
+
+## Your customers are already there
+
+- **3 billion people** use WhatsApp every month. ([Meta, Q1 2025](https://mezha.ua/en/news/whatsapp-3-milyarda-mau-301590/))
+- **200 million+** use the WhatsApp Business app every month. ([Statista](https://www.statista.com/statistics/1538342/whatsapp-business-mau-worldwide))
+
+They already send messages like *"do you have time on Saturday?"*. If nobody answers at 11 pm, they book with whoever does.
+
+This kit answers every one of them, books the slot, and never double books.
+
+## What your customers see
 
 ```
-you:   haircut with mert tuesday at noon?
+Elif:  haircut with mert tuesday at noon?
+
 Nova:  Mert has 12:00 free on Tuesday.
        ┌──────────────────────────────┐
        │ Haircut                      │
@@ -18,55 +37,82 @@ Nova:  Mert has 12:00 free on Tuesday.
        │ ₺600                         │
        │                              │
        │ Shall I book it?             │
-       │  [ Book it ]   [ Change ]    │
+       │   [ Book it ]   [ Change ]   │
        └──────────────────────────────┘
-you:   (taps Book it)
+
+Elif:  (taps Book it)
+
 Nova:  Booked ✅
 ```
 
-## Try it in one minute
+No app to download and no form to fill in. The customer types the way they talk, then taps.
 
-No WhatsApp account needed. The terminal chat shows menus as numbered options; type a number to tap one.
+## Why it's safe
+
+**The AI cannot book anything.** It has no tool for that.
+
+| Who | What they can do |
+|---|---|
+| Claude | Read the message, show menus, show the confirmation card |
+| The customer | Tap **Book it**. Only this saves a booking |
+| The database | Refuse a second booking for the same slot, even if two people tap at the same second |
+
+A confused model can show the wrong menu. It can never create or cancel an appointment.
+
+## Who it's for
+
+| You run | It handles |
+|---|---|
+| A salon or barber shop | Haircuts, colour, nails, with each person's own hours |
+| A clinic or studio | Sessions with a fixed length and a booking window |
+| A side project for local businesses | A ready engine you can sell or set up for clients |
+
+## Try it in 1 minute
+
+You don't need a WhatsApp account. The terminal shows menus as numbered options; type a number to tap.
 
 ```bash
 git clone https://github.com/m-fyi/whatsapp-booking-agent
 cd whatsapp-booking-agent
 npm install
-cp .env.example .env      # add ANTHROPIC_API_KEY to chat with Claude
 npm run chat
 ```
 
-Without an API key it still runs as a menu-only bot, so you can click through the whole booking flow for free.
-
-## What you get
-
-- **Natural language in, tappable menus out.** Claude reads the message; WhatsApp list and button messages do the rest.
-- **One booking tool, not ten.** Claude calls `continue_booking` with whatever the customer said. The engine sends the next missing step: staff, day, time or the confirmation card.
-- **Real availability only.** Opening hours, each person's own hours, service length, existing bookings, a minimum lead time and a booking window. Claude never guesses a free time.
-- **No double booking.** The memory store checks and writes in one step. The Supabase store has a Postgres exclusion constraint, so two servers racing for one slot can't both win. The loser is shown the times still free.
-- **No silent failures.** API errors are logged through `onError` and the customer gets a reply. A model refusal or a stuck loop hands the chat to your team.
-- **Hand off to a person.** Claude can pass a conversation to your team; the bot then stays quiet for that customer.
-- **Webhook-safe.** Signature check, duplicate deliveries skipped, messages from one customer handled in order.
-- **English and Turkish** menus included. Add a language in `src/i18n.ts`.
-- **Prompt caching** on the system prompt, and refusal fallback on, through the Claude API.
+No API key? It still runs as a menu bot, so you can try the whole booking flow for free. Add `ANTHROPIC_API_KEY` to `.env` (copy `.env.example`) to chat in plain language.
 
 ## Give it to your AI
 
-Already have an app? Paste [`prompts/add-to-my-app.md`](prompts/add-to-my-app.md) into Claude Code, Cursor or any coding agent. It tells the agent how to add this booking assistant to your project, wire it to your database and keep the safety rule intact.
+Already have an app? Paste [`prompts/add-to-my-app.md`](prompts/add-to-my-app.md) into Claude Code, Cursor or any coding agent. It plans the integration with you first, then adds the booking assistant to your project and keeps the safety rule.
 
-Working on this repo with an agent? It reads [`AGENTS.md`](AGENTS.md) first.
+Working on this repo with an agent? It reads [`AGENTS.md`](AGENTS.md).
 
-## Connect WhatsApp
+## What's inside
 
-1. Create an app at [developers.facebook.com](https://developers.facebook.com), add the **WhatsApp** product and note your **phone number ID** and **access token**.
+- **Plain language in, menus out.** Claude reads the message. WhatsApp lists and buttons do the rest.
+- **Real free times only.** Opening hours, each person's hours, service length, existing bookings, how soon and how far ahead people can book.
+- **No double booking.** Checked in code and enforced by the database.
+- **No silent failures.** Errors are reported, and the customer always gets a reply.
+- **Hand off to a person.** The bot steps back when a customer asks for a human.
+- **English and Turkish** built in.
+- **Cheap to run.** Taps never call the AI, and the system prompt is cached.
+
+---
+
+<details>
+<summary><b>Connect WhatsApp</b></summary>
+
+1. Create an app at [developers.facebook.com](https://developers.facebook.com), add **WhatsApp**, and note the **phone number ID** and **access token**.
 2. Fill in `.env` (see `.env.example`).
-3. Start the server: `npm start`. It listens on `PORT` (3000).
-4. Expose it over HTTPS (any tunnel or host), then set the webhook URL to `https://your-host/webhook` with your `WHATSAPP_VERIFY_TOKEN`, and subscribe to the `messages` field.
-5. Message your WhatsApp number.
+3. Run `npm start`. It listens on `PORT` (3000).
+4. Put it behind HTTPS (any host or tunnel). Set the webhook URL to `https://your-host/webhook` with your `WHATSAPP_VERIFY_TOKEN`, and subscribe to `messages`.
+5. Send a message to your WhatsApp number.
 
-## Set up your business
+</details>
 
-Everything about the business lives in one JSON file. See [`examples/salon.json`](examples/salon.json):
+<details>
+<summary><b>Set up your business</b></summary>
+
+Everything lives in one JSON file. See [`examples/salon.json`](examples/salon.json).
 
 ```jsonc
 {
@@ -75,25 +121,31 @@ Everything about the business lives in one JSON file. See [`examples/salon.json`
   "timezone": "Europe/Istanbul",
   "currency": "TRY",
   "minLeadMinutes": 60,             // no bookings sooner than this
-  "maxLeadDays": 14,                // booking window
-  "hours": { "mon": ["09:00", "19:00"], "sun": null, ... },
+  "maxLeadDays": 14,                // how far ahead people can book
+  "hours": { "mon": ["09:00", "19:00"], "sun": null },
   "services": [{ "id": "haircut", "name": "Haircut", "minutes": 45, "price": 600 }],
-  "staff": [{ "id": "mert", "name": "Mert", "services": ["haircut"], "hours": { ... } }],
+  "staff": [{ "id": "mert", "name": "Mert", "services": ["haircut"] }],
   "faq": [{ "q": "Where are you?", "a": "Moda Caddesi 12, Kadıköy." }]
 }
 ```
 
-The file is validated on start, with a clear error for each mistake.
+The file is checked on start, with a clear message for each mistake.
 
-## Storage
+</details>
 
-| Store | Use it for | Set |
+<details>
+<summary><b>Storage</b></summary>
+
+| Store | Use it for | Setting |
 |---|---|---|
-| Memory | Trying it out, tests | `STORE=memory` (default) |
-| Supabase | Production | `STORE=supabase`, run [`supabase/schema.sql`](supabase/schema.sql) |
-| Your own | Prisma, Drizzle, anything | Implement the `Store` interface in [`src/store/types.ts`](src/store/types.ts) (7 methods) |
+| Memory | Trying it, tests | `STORE=memory` (default) |
+| Supabase | Production | `STORE=supabase`, then run [`supabase/schema.sql`](supabase/schema.sql) |
+| Your own | Prisma, Drizzle, anything | Implement `Store` in [`src/store/types.ts`](src/store/types.ts) (7 methods) |
 
-## How it works
+</details>
+
+<details>
+<summary><b>How it works</b></summary>
 
 ```mermaid
 flowchart LR
@@ -106,12 +158,12 @@ flowchart LR
   F -->|"only on 'Book it' tap"| DB[(Store)]
 ```
 
-- **Text** goes to Claude, which may call tools. Every tool either reads data or sends a menu.
-- **Taps** never reach Claude. `flow.ts` reads the option id (`slot:2026-10-13|12:00`) and moves to the next step.
-- **`advance()`** in `flow.ts` decides the next step for both paths, so they can't disagree.
-- **`book()`** is the only function that writes a booking, and only a `confirm:yes` tap calls it. It checks the slot again first, because the card may be minutes old.
+- **Text** goes to Claude. Every tool it has either reads data or sends a menu.
+- **Taps** never reach Claude. `flow.ts` reads the option id, like `slot:2026-10-13|12:00`.
+- **`advance()`** picks the next step for both paths, so they always agree.
+- **`book()`** is the only function that saves a booking. Only the `Book it` tap calls it, and it checks the slot again first.
 
-Use it as a library in your own server:
+Use the engine inside your own server:
 
 ```ts
 import Anthropic from "@anthropic-ai/sdk";
@@ -128,14 +180,25 @@ const engine = createEngine({
 const replies = await engine.handle({ messageId: "wamid.1", from: "905551112233", name: "Elif", type: "text", text: "hi" });
 ```
 
-## Tests
+</details>
+
+<details>
+<summary><b>Tests</b></summary>
 
 ```bash
 npm test
 ```
 
-The tests run without an API key. A scripted fake Claude checks the agent's behaviour, including the core rule: a confirmation card alone never creates a booking.
+No API key needed. A scripted fake Claude checks the core rule: a confirmation card alone never creates a booking.
 
-## License
+</details>
 
-MIT. Built by [Melih İlkay Deniz](https://github.com/m-fyi).
+---
+
+<div align="center">
+
+**If this saves you a week, give it a ⭐ so others can find it.**
+
+MIT · Built by [Melih İlkay Deniz](https://github.com/m-fyi)
+
+</div>
